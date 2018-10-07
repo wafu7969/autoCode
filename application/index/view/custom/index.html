@@ -1,0 +1,205 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css" />
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>基本设置</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span>
+    系统管理
+    <span class="c-gray en">&gt;</span>
+    基本设置
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+        <form action="" method="post" class="form form-horizontal" id="myForm">
+            <legend>自定义生成</legend>
+
+
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">选择表名：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <span class="select-box">
+							<select class="select" size="1" name="tableName" id="tableName">
+                                <option value="" selected="">请先选择表名</option>
+                                {volist name='table' id='vo'}
+                                <option value="{$vo}">{$vo}</option>
+                                {/volist}
+                            </select>
+                    </span>
+                </div>
+            </div>
+
+
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">是否自动时间戳：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="checkbox" id="is_join_checkbox" value="1" name="is_autoWriteTimestamp">
+                    <label for="is_join_checkbox">是</label>
+                </div>
+            </div>
+
+            <div class="row cl" id="json_body"></div>
+
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">添加方法：</label>
+                <div class="formControls skin-minimal col-xs-8 col-sm-9" id="json_add">
+                    <input class="btn btn-success radius" type="button" value="添加" id="add">
+                </div>
+            </div>
+
+
+
+
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">所属分组：</label>
+                <div class="formControls skin-minimal col-xs-8 col-sm-9">
+                    {volist name='groupItem' id='vo'}
+                    <input type="radio" id="radio-1" name="group" value="{$vo}">
+                    <label for="radio-1">{$vo}</label>
+                    {/volist}
+                </div>
+            </div>
+
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                    <input class="btn btn-primary radius" type="button" id="buttSubmit" value="开始生成">
+                </div>
+            </div>
+        </form>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script>
+
+    $('#add').click(function()
+    {
+        tableName=$('#tableName').val();
+        if(tableName=='')
+        {
+            layer.alert('请先选择表名');
+            return false;
+        }
+
+        parent.layer.open({
+            type: 2,
+            title: '添加方法-'+tableName+"表",
+            shadeClose: true,
+            shade: 0.8,
+            area: ['100%', '100%'],
+            content: '{:url("addMethod")}?tableName='+tableName,
+            end: function(){
+                window.location.reload();
+            }
+        });
+
+    });
+
+    //初始化
+    cacheData=sessionStorage.cache;
+    if(cacheData)
+    {
+        tableName=sessionStorage.tableName;
+        $("#tableName").val(tableName);
+
+        $.ajax({
+            url:"{:url('format')}",
+            data:{data:cacheData},
+            dataType:"json",
+            error:function(data){
+                alert(data);
+            },
+            success:function(data)
+            {
+                fields=data.data;
+                $returnStr='';
+                for(var i = 0; i < fields.length; i++)
+                {
+                    $returnStr +="<div class=\"panel panel-default mt-10\">";
+                    $returnStr +="<div class=\"panel-header\">内容</div>";
+                    $returnStr +="<div class=\"panel-body\">";
+                    $returnStr +="<div class=\'row cl mt-10\'>";
+                    $returnStr +="        <label class=\'form-label col-xs-4 col-sm-3\'>模型：</label>";
+                    $returnStr +="        <div class=\'formControls col-xs-8 col-sm-9\'>";
+                    $returnStr +="            <textarea class=\'textarea\' rows=\'20\' cols=\'\' name=\'model[]\'>"+fields[i]['model']+"</textarea>";
+                    $returnStr +="        </div>";
+                    $returnStr +="    </div>";
+                    $returnStr +="    <div class=\'row cl mt-10\'>";
+                    $returnStr +="        <label class=\'form-label col-xs-4 col-sm-3\'>逻辑层：</label>";
+                    $returnStr +="        <div class=\'formControls col-xs-8 col-sm-9\'>";
+                    $returnStr +="            <textarea class=\'textarea\' rows=\'20\' cols=\'\' name=\'event[]\'>"+fields[i]['event']+"</textarea>";
+                    $returnStr +="        </div>";
+                    $returnStr +="    </div>";
+                    $returnStr +="    <div class=\'row cl mt-10\'>";
+                    $returnStr +="        <label class=\'form-label col-xs-4 col-sm-3\'>api层：</label>";
+                    $returnStr +="        <div class=\'formControls col-xs-8 col-sm-9\'>";
+                    $returnStr +="            <textarea class=\'textarea\' rows=\'20\' cols=\'\' name=\'api[]\'>"+fields[i]['api']+"</textarea>";
+                    $returnStr +="        </div>";
+                    $returnStr +="    </div>";
+                    $returnStr +="</div></div>";
+                }
+
+                $("#json_body").append($returnStr);
+
+            }
+        });
+    }
+
+
+    //提交表单
+    $(function(){
+        $('#buttSubmit').click(function(){
+            //data=sessionStorage.cache;
+            $.ajax({
+                url:"{:url('make')}",
+                data:$('#myForm').serialize(),
+                dataType:"json",
+                error:function(data){
+                    alert(data);
+                },
+                success:function(data)
+                {
+                    if(data.code==1)
+                    {
+                        sessionStorage.clear();
+                        alert(data.msg);
+                    }
+                    else
+                    {
+                        alert(data.msg);
+                        sessionStorage.clear();
+                    }
+
+                }
+            });
+        });
+    });
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

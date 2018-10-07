@@ -1,0 +1,505 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css" />
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>基本设置</title>
+</head>
+<body>
+<div class="page-container">
+    <form action="" method="post" class="form form-horizontal" id="myForm">
+        <legend>添加生成的方法</legend>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">选择方法：</label>
+            <div class="formControls col-xs-8 col-sm-10">
+                <span class="select-box">
+                    <select class="select" size="1" name="method" id="method">
+                        <option value="" selected="">请先选择方法类型</option>
+                        <option value="select">select</option>
+                        <option value="find">find</option>
+                        <option value="save">save</option>
+                        <option value="update">update</option>
+                        <option value="count">count</option>
+                        <option value="sum">sum</option>
+                    </select>
+                </span>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">方法名：</label>
+            <div class="formControls col-xs-8 col-sm-10">
+                <input type="text" class="input-text" placeholder="请输入方法名" value="" name="method_name">
+            </div>
+        </div>
+
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">功能注释：</label>
+            <div class="formControls col-xs-8 col-sm-10">
+                <input type="text" class="input-text" placeholder="请输入功能注释" name="method_note" value="">
+            </div>
+        </div>
+
+
+        <div class="row cl" id="is_join">
+            <label class="form-label col-xs-4 col-sm-2">是否关联查询：</label>
+            <div class="formControls col-xs-8 col-sm-10">
+                <div class="check-box">
+                    <input type="checkbox" id="is_join_checkbox" value="1" name="is_join">
+                    <label for="is_join_checkbox">是</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row cl" id="join_table" style="display: none;">
+            <label class="form-label col-xs-4 col-sm-2">添加关联表：</label>
+            <div class="formControls skin-minimal col-xs-8 col-sm-10">
+                <table class="table table-border table-bg">
+                    <thead>
+                    <tr>
+                        <th width="25%">表名</th>
+                        <th width="25%">别名</th>
+                        <th width="30%">关联条件</th>
+                        <th width="20%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="join_table_tbody">
+                    <tr>
+                        <td><input type="text" class="input-text" placeholder="请输入表名" value="{$tableName}" name="join_table_name[]"></td>
+                        <td><input type="text" class="input-text" placeholder="请输入别名" value="" name="join_table_alias[]"></td>
+                        <td>
+                            <span class="select-box">
+                            <select class="select" size="1" name="join_table_condition[]">
+                                <option value="inner">inner</option>
+                                <option value="left">left</option>
+                                <option value="right">right</option>
+                            </select>
+                            </span>
+                        </td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <input class="btn btn-primary radius mt-20" value="添加关联表" id="add_table">
+            </div>
+        </div>
+
+
+        <div class="row cl" id="back_field_div" style="display: none">
+            <label class="form-label col-xs-4 col-sm-2">选择返回字段(Field)：</label>
+            <div class="formControls skin-minimal col-xs-8 col-sm-10" id="back_field_table">
+
+                <table class="table table-border table-bg">
+                    <thead>
+                    <tr>
+                        <th width="20%">表名</th>
+                        <th width="20%">字段名</th>
+                        <th width="15%">类型</th>
+                        <th width="20%">注释</th>
+                        <th width="10%">是否返回</th>
+                        <th width="15%">别名</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {volist name='field' id='vo'}
+                    <tr>
+                        <th>{$tableName}</th>
+                        <th>{$vo.COLUMN_NAME}</th>
+                        <td>{$vo.DATA_TYPE}</td>
+                        <td>{$vo.COLUMN_COMMENT}</td>
+                        <td>
+                            <div class="check-box">
+                                <input type="checkbox" value="1" name="{$tableName}[{$vo.COLUMN_NAME}][is_back]">
+                                <label>是</label>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="text" class="input-text" placeholder="请输入字段别名" value="" name="{$tableName}[{$vo.COLUMN_NAME}][alias]">
+                        </td>
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">查询条件(where)：</label>
+            <div class="formControls skin-minimal col-xs-8 col-sm-10">
+
+                <table class="table table-border table-bg">
+                    <thead>
+                    <tr>
+                        <th>字段名</th>
+                        <th>类型</th>
+                        <th>注释</th>
+                        <th>条件</th>
+                        <th>值</th>
+                        <th>是否必须</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {volist name='field' id='vo'}
+                    <tr>
+                        <th>{$vo.COLUMN_NAME}</th>
+                        <td>{$vo.DATA_TYPE}</td>
+                        <td>{$vo.COLUMN_COMMENT}</td>
+                        <td>
+                            <select class="select" size="1" name="{$tableName}[{$vo.COLUMN_NAME}][where][condition]">
+                                <option value="0">选择条件</option>
+                                <option value="eq">=</option>
+                                <option value="in">in</option>
+                                <option value="<="><=</option>
+                                <option value=">=">>=</option>
+                                <option value="between">范围</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="input-text" placeholder="不填使用传参" name="{$tableName}[{$vo.COLUMN_NAME}][where][value]" value="">
+                        </td>
+                        <td>
+                            <div class="check-box">
+                                <div class="check-box">
+                                    <input type="checkbox" id="is_must_checkbox" value="1" name="{$tableName}[{$vo.COLUMN_NAME}][where][is]">
+                                    <label for="is_must_checkbox">是</label>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+
+        <div class="row cl" id="page" style="display: none">
+            <label class="form-label col-xs-4 col-sm-2">是否分页：</label>
+            <div class="formControls skin-minimal col-xs-8 col-sm-10">
+
+                <table class="table table-border table-bg">
+                    <thead>
+                    <tr>
+                        <th>是否</th>
+                        <th>分页大小</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th>
+                            <div class="check-box">
+                                <div class="check-box">
+                                    <input type="checkbox" id="is_page_checkbox" name="is_page" value="1">
+                                    <label for="is_page_checkbox">是</label>
+                                </div>
+                            </div>
+                        </th>
+                        <td><input type="text" class="input-text" placeholder="默认15" value="15" name="page_size"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">生成API/EVENT？：</label>
+            <div class="formControls skin-minimal col-xs-8 col-sm-10">
+                <div class="check-box">
+                    <div class="check-box">
+                        <input type="checkbox" id="is_api_event_checkbox" name="is_api_event" value="1">
+                        <label for="is_api_event_checkbox">生成API&EVENT</label>
+                    </div>
+                </div>
+                <div class="check-box">
+                    <div class="check-box">
+                        <input type="checkbox" id="is_event_checkbox" name="is_event" value="1">
+                        <label for="is_event_checkbox">仅生成EVENT</label>
+                    </div>
+                </div>
+                <div class="check-box">
+                    <div class="check-box">
+                        <input type="checkbox" id="is_api_validate_checkbox" name="is_api_validate" value="1">
+                        <label for="is_api_validate_checkbox">生成API验证层</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-2 col-sm-2 f-r text-r">
+                <input class="btn btn-primary radius" type="button" value="添加" id="buttSubmit">
+            </div>
+            <div class="col-xs-2 col-sm-2 f-r  text-r">
+                <input class="btn btn-primary radius" type="button" value="预览" id="preview">
+            </div>
+        </div>
+    </form>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script>
+
+    //是否关联查询
+    $("#is_join_checkbox").click(function()
+    {
+        if($(this).is(':checked'))
+        {
+            $('#join_table').show();
+        }
+        else
+        {
+            $('#join_table').hide();
+        }
+    });
+
+    //点击添加关联表
+    $("#add_table").click(function()
+    {
+        //首先获得所有的表
+        $.ajax({
+            url: '{:url("getTableAll")}',
+            type: 'post',
+            dataType: 'json',
+            timeout: 1000,
+            success: function (data, status)
+            {
+                return_html= '<tr>'
+                        +'<td><span class="select-box"><select class="select join_table_name" size="1" name="join_table_name[]">'
+                        +'<option value="" selected="">请先选择表名</option>';
+
+                var select='';
+                back_data=data.data;
+                for(var i = 0; i < back_data.length; i++)
+                {
+                    select=select+'<option value="'+back_data[i]+'">'+back_data[i]+'</option>'
+                }
+
+                return_html=return_html+select+'</select></span></td>'
+                      +'<td><input type="text" class="input-text" placeholder="请输入别名" value="" name="join_table_alias[]"></td>'
+                      +'<td><input type="text" class="input-text" placeholder="请输入关联条件" value="" name="join_table_condition[]"></td>'
+                      +'<td><a class="del_table">删除</a></td></tr>';
+
+                $('#join_table_tbody').append(return_html);
+            },
+            fail: function (err, status) {
+                console.log(err)
+            }
+        })
+    });
+
+    //关联查询时获得选中表的字段
+    $("#join_table_tbody").on("change",".join_table_name",function(){
+        var tableName=$(this).val();
+
+        //首先获得所有的表
+        $.ajax({
+            url: '{:url("getTableField")}',
+            type: 'post',
+            dataType: 'json',
+            data:{'tableName':tableName},
+            timeout: 1000,
+            success: function (data, status)
+            {
+                returnHtml='<table class="table table-border table-bg">'
+                        +'<thead>'
+                        +'<tr>'
+                        +'<th width="20%">表名</th>'
+                        +'<th width="20%">字段名</th>'
+                        +'<th width="15%">类型</th>'
+                        +'<th width="20%">注释</th>'
+                        +'<th width="10%">是否返回</th>'
+                        +'<th width="15%">别名</th>'
+                        +'</tr>'
+                        +'</thead>'
+                        +'<tbody>';
+                fields=data.data
+                for(var i = 0; i < fields.length; i++)
+                {
+
+                    returnHtml=returnHtml+'<tr>'
+                            +'<th>'+tableName+'</th>'
+                            +'<th>'+fields[i]['COLUMN_NAME']+'</th>'
+                            +'<td>'+fields[i]['DATA_TYPE']+'</td>'
+                            +'<td>'+fields[i]['COLUMN_COMMENT']+'</td>'
+                            +'<td>'
+                            +'<div class="check-box">'
+                                +'<input type="checkbox" value="1" name="'+tableName+'['+fields[i]['COLUMN_NAME']+'][is_back]">'
+                                +'<label>是</label>'
+                            +'</div>'
+                            +'</td>'
+                            +'<td>'
+                                +'<input type="text" class="input-text" placeholder="请输入字段别名" value="" name="'+tableName+'['+fields[i]['COLUMN_NAME']+'][alias]">'
+                            +'</td>'
+                            +'</tr>';
+                }
+
+                returnHtml=returnHtml+'</tbody></table>';
+
+                $('#back_field_table').append(returnHtml);
+            },
+            fail: function (err, status) {
+                console.log(err)
+            }
+        })
+    });
+
+
+    $("#join_table_tbody").on("click",".del_table",function(){
+        $(this).parent().parent().remove();
+    });
+
+    $('#method').change(function()
+    {
+        method=$('#method').val();
+        //分页
+        if(method=='select')
+        {
+            $("#page").show();
+        }
+        else
+        {
+            $("#page").hide();
+        }
+
+        //返回字段
+        if(method=='select' || method=='find')
+        {
+            $("#back_field_div").show();
+            $("#is_join").show();
+        }
+        else
+        {
+            $("#back_field_div").hide();
+            $("#is_join").hide();
+            $('#join_table').hide();
+        }
+    });
+
+
+    //提交表单
+    $(function()
+    {
+        $('#buttSubmit').click(function(){
+
+            if($('#method').val()=='')
+            {
+                alert("请选择查询类型！");
+                return false;
+            }
+
+            sessionStorage.tableName = "{$tableName}";
+
+            $.ajax({
+                url:"{:url('postMethod')}",
+                data:$('#myForm').serialize(),
+                dataType:"json",
+                error:function(data){
+                    alert(data);
+                },
+                success:function(data)
+                {
+                    returnData=data.data;
+                    cache = sessionStorage.cache;
+                    var new_str = JSON.stringify(returnData);
+                    if(cache)
+                    {
+                        new_str=new_str+"$$$$"+cache;
+                    }
+                    sessionStorage.cache = new_str;
+                    alert("添加成功，请继续添加！");
+                    window.location.reload();
+                }
+            });
+        });
+    });
+
+    //点击预览
+    $('#preview').click(function()
+    {
+        param=$('#myForm').serialize()
+        parent.layer.open({
+            type: 2,
+            title: '预览',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['60%', '80%'],
+            content: '{:url("preview")}?'+param,
+            end: function()
+            {
+
+            }
+        });
+
+    });
+
+    //合并json对象
+    function mergejson(jsonbject1, jsonbject2) {
+        var str1 = '';
+        var str2 = '';
+        var str3 = '';
+        if (jsonbject1 != undefined) {
+            str1 = JSON.stringify(jsonbject1); //将JSON对象转化为JSON字符
+        }
+        if (str1 != undefined) {
+            str1 = str1.substr(1, str1.length - 2);
+        }
+        if (jsonbject2 != undefined) {
+            str2 = JSON.stringify(jsonbject2); //将JSON对象转化为JSON字符
+        }
+        if (str2 != undefined) {
+            str2 = str2.substr(1, str2.length - 2);
+        }
+        if ((str1 + str2) == undefined) {
+            str3 = '[]';
+        }
+        else if ((str1 + str2) == '') {
+            str3 = '[]';
+        }
+        else if (str1 == undefined) {
+            str3 = '[' + str2 + ']';
+        } else if (str1 == '') {
+            str3 = '[' + str2 + ']';
+        } else if (str2 == undefined) {
+            str3 = '[' + str1 + ']';
+        } else if (str2 == '') {
+            str3 = '[' + str1 + ']';
+        } else {
+            str3 = '[' + str1 + ',' + str2 + ']';
+        }
+        if (str3 != undefined) {
+            var obj = JSON.parse(str3); //由JSON字符串转换为JSON对象
+            return obj;
+        } else { return [{}]; }
+    }
+</script>
+
+</body>
+</html>
