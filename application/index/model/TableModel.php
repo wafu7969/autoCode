@@ -13,15 +13,8 @@ class TableModel extends Base
     //获得数据库里面所有的表
     public static function getTableAll()
     {
-        $table=self::query('show tables');
-
-        $returnData=array();
-        foreach($table as $key=>$value)
-        {
-            $returnData[]=implode('',array_values($value));
-        }
-
-        return $returnData;
+        $table=self::query("SELECT TABLE_NAME,table_comment FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA ='".config('dataname')."'");
+        return $table;
     }
 
     public static function getTableField($tableName)

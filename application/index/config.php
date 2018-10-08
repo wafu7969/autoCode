@@ -1,17 +1,18 @@
 <?php
 
 return [
+    'dataname'          => 'xmh_v5',  //数据表前缀
     'prefix'          => 'cc_',  //数据表前缀
     'group'           =>[
         'api'=>[
-            'api'=>'F:\5-sdkj\www\v5_php(test)\v5.0\application\api\controller\v5',
-            'event'=>'F:\5-sdkj\www\v5_php(test)\v5.0\application\api\event',
-            'model'=>'F:\5-sdkj\www\v5_php(test)\v5.0\application\api\model',
+            'api'=>'E:\2-xmh(test)\application\api\controller\v5',
+            'event'=>'E:\2-xmh(test)\application\api\event',
+            'model'=>'E:\2-xmh(test)\application\api\model',
         ],
         'admin'=>[
-            'api'=>'F:\5-sdkj\www\v5_php(test)\v5.0\application\admin\controller',
-            'event'=>'F:\5-sdkj\www\v5_php(test)\v5.0\application\admin\Event',
-            'model'=>'F:\5-sdkj\www\v5_php(test)\v5.0\application\admin\model',
+            'api'=>'E:\2-xmh(test)\application\admin\controller',
+            'event'=>'E:\2-xmh(test)\application\admin\Event',
+            'model'=>'E:\2-xmh(test)\application\admin\model',
         ]
     ],
     'temp'=>[

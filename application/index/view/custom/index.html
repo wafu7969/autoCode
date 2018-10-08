@@ -42,7 +42,7 @@
 							<select class="select" size="1" name="tableName" id="tableName">
                                 <option value="" selected="">请先选择表名</option>
                                 {volist name='table' id='vo'}
-                                <option value="{$vo}">{$vo}</option>
+                                <option value="{$vo.TABLE_NAME}">{$vo.TABLE_NAME}--{$vo.table_comment}</option>
                                 {/volist}
                             </select>
                     </span>
