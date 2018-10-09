@@ -19,7 +19,8 @@ class TableModel extends Base
 
     public static function getTableField($tableName)
     {
-        return self::query('select COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT from information_schema.COLUMNS where table_name = "'.$tableName.'"');
+
+        return self::query('select COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT from information_schema.COLUMNS where TABLE_SCHEMA = "'.config('dataname').'" and table_name = "'.$tableName.'"');
     }
 
 }

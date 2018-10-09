@@ -299,7 +299,7 @@
                 back_data=data.data;
                 for(var i = 0; i < back_data.length; i++)
                 {
-                    select=select+'<option value="'+back_data[i]+'">'+back_data[i]+'</option>'
+                    select=select+'<option value="'+back_data[i]['TABLE_NAME']+'">'+back_data[i]['TABLE_NAME']+"("+back_data[i]['table_comment']+')</option>'
                 }
 
                 return_html=return_html+select+'</select></span></td>'
