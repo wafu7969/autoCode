@@ -51,7 +51,6 @@ class Custom extends Base
         }
     }
 
-
     //添加模型的方法页
     public function addMethod()
     {
