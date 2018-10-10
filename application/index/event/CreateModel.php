@@ -46,6 +46,9 @@ class CreateModel extends Base
     }
 
 
+
+
+
     //生成model层的方法
     public function select($data,$method)
     {
@@ -59,6 +62,7 @@ class CreateModel extends Base
 
         $join='';
         //联合查询组合条件
+
         if(!empty($filedJoinWhere['join']))
         {
             $join=$filedJoinWhere['join'];
@@ -72,7 +76,8 @@ class CreateModel extends Base
             $where='where($where)->';
             foreach($filedJoinWhere['where'] as $key=>$value)
             {
-                if($value['condition']!='between')
+                $value['condition']=trim($value['condition']);
+                if($value['condition']!='between' && $value['condition']!='like')
                 {
                     if(isset($value['is']) && $value['is']==1)
                     {
@@ -99,8 +104,108 @@ class CreateModel extends Base
                         $methodStr.="\n\t";
                     }
                 }
-                else
+                elseif($value['condition']=='like')
                 {
+
+                    if(isset($value['is']) && $value['is']==1)
+                    {
+                        if($value['value']=='')
+                        {
+                            $methodStr.='$where[\''.$key.'\']=[\''.$value['condition'].'\',"%".$data[\''.$value['field'].'\']."%"];';
+                            $methodStr.="\n\t";
+                        }
+                        else
+                        {
+                            $methodStr=$methodStr.'$where[\''.$key.'\']=[\''.$value['condition'].'\',"%".'.$value['value'].'."%"];';
+                            $methodStr.="\n\t";
+                        }
+                    }
+                    else
+                    {
+                        $methodStr.='if(isset($data[\''.$value['field'].'\']) && !empty($data[\''.$value['field'].'\']))';
+                        $methodStr.="\n\t";
+                        $methodStr.='{';
+                        $methodStr.="\n\t\t";
+                        $methodStr.= '$where[\''.$key.'\']=[\''.$value['condition'].'\',"%".$data[\''.$value['field'].'\']."%"];';
+                        $methodStr.="\n\t";
+                        $methodStr.='}';
+                        $methodStr.="\n\t";
+                    }
+
+                }
+                elseif($value['condition']=='between')
+                {
+
+                    if(isset($value['is']) && $value['is']==1)
+                    {
+
+                        if($value['value']=='')
+                        {
+                            $methodStr.='$where[\''.$key.'\'][]=[\'>=\',$data[\''.$value['field'].'\']];';
+                            $methodStr.="\n\t";
+                            $methodStr.='$where[\''.$key.'\'][]=[\'<=\',$data[\''.$value['field'].'\']];';
+                            $methodStr.="\n\t";
+                        }
+                        else
+                        {
+                            $a=explode('|',$value['value']);
+                            $methodStr=$methodStr.'$where[\''.$key.'\'][]=[\'>=\',$data[\''.$a[0].'\']];';
+                            $methodStr.="\n\t";
+                            $methodStr=$methodStr.'$where[\''.$key.'\'][]=[\'<=\',$data[\''.$a[1].'\']];';
+                            $methodStr.="\n\t";
+                        }
+                    }
+                    else
+                    {
+
+                        if($value['value']=='')
+                        {
+                            $methodStr.='if(isset($data[\''.$value['field'].'\']) && !empty($data[\''.$value['field'].'\']))';
+                            $methodStr.="\n\t";
+                            $methodStr.='{';
+                            $methodStr.="\n\t\t";
+                            $methodStr.= '$where[\''.$key.'\']=[\'>=\',$data[\''.$value['field'].'\']];';
+                            $methodStr.="\n\t";
+                            $methodStr.='}';
+                            $methodStr.="\n\t";
+
+
+                            $methodStr.='if(isset($data[\''.$value['field'].'\']) && !empty($data[\''.$value['field'].'\']))';
+                            $methodStr.="\n\t";
+                            $methodStr.='{';
+                            $methodStr.="\n\t";
+                            $methodStr.= '$where[\''.$key.'\']=[\'<=\',$data[\''.$value['field'].'\']];';
+                            $methodStr.="\n\t";
+                            $methodStr.='}';
+                            $methodStr.="\n\t";
+
+                        }
+                        else
+                        {
+                            $a=explode('|',$value['value']);
+
+                            $methodStr.='if(isset($data[\''.$a[0].'\']) && !empty($data[\''.$a[0].'\']))';
+                            $methodStr.="\n\t";
+                            $methodStr.='{';
+                            $methodStr.="\n\t\t";
+                            $methodStr.= '$where[\''.$key.'\']=[\'>=\',$data[\''.$a[0].'\']];';
+                            $methodStr.="\n\t";
+                            $methodStr.='}';
+                            $methodStr.="\n\t";
+
+
+                            $methodStr.='if(isset($data[\''.$a[1].'\']) && !empty($data[\''.$a[1].'\']))';
+                            $methodStr.="\n\t";
+                            $methodStr.='{';
+                            $methodStr.="\n\t";
+                            $methodStr.= '$where[\''.$key.'\']=[\'<=\',$data[\''.$a[1].'\']];';
+                            $methodStr.="\n\t";
+                            $methodStr.='}';
+                            $methodStr.="\n\t";
+
+                        }
+
+                    }
 
                 }
 

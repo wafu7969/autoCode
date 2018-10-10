@@ -16,8 +16,8 @@ return [
         ]
     ],
     'temp'=>[
-        'admin'=>'F:\5-myTool\CodeBuilder\application\index\template\admin',
-        'api'=>'F:\5-myTool\CodeBuilder\application\index\template\api',
+        'admin'=>'E:\10-autoCode\application\index\template\admin',
+        'api'=>'E:\10-autoCode\application\index\template\api',
      ],
     'copyright'=>'Xmh',
     'user_name'=>'Fuqiang wang',

@@ -7,6 +7,7 @@
  */
 
 namespace app\admin\controller\v5;
+use app\admin\controller\Admin;
 use app\admin\event\{$api_name$}Event;
 
 class {$api_name$} extends Admin

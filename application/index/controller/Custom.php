@@ -116,14 +116,12 @@ class Custom extends Base
             else
             {
                 //追加写入
-                $handle=fopen($api_path,"w");
-                fwrite($handle,$temp);
-                $error.="api已经存在，追加写入成功！";
+                //$handle=fopen($api_path,"w");
+                //fwrite($handle,$temp);
+                $error.="api已经存在，建议手动添加！";
             }
 
         }
-
-
 
 
 
@@ -160,9 +158,9 @@ class Custom extends Base
             else
             {
                 //追加写入
-                $handle=fopen($event_path,"w");
-                fwrite($handle,$temp);
-                $error.="event已经存在，追加写入成功！";
+                //$handle=fopen($event_path,"w");
+                //fwrite($handle,$temp);
+                $error.="event已经存在，建议手动添加！";
             }
 
         }
@@ -192,9 +190,14 @@ class Custom extends Base
             $temp=str_replace('{$tableName$}',$fileName,$temp);
             if(isset($data['is_autoWriteTimestamp']) && $data['is_autoWriteTimestamp']==1)
             {
-                $temp=str_replace('{$autoWriteTimestamp$}','\t protected $autoWriteTimestamp=true; \n',$temp);
+                $temp=str_replace('{$autoWriteTimestamp$}','protected $autoWriteTimestamp=true;',$temp);
             }
-            $temp=str_replace('{$method$}',$eventMethod,$temp);
+            else
+            {
+                $temp=str_replace('{$autoWriteTimestamp$}','',$temp);
+            }
+
+            $temp=str_replace('{$method$}',$modelMethod,$temp);
 
             if(!file_exists($model_path))
             {
@@ -208,9 +211,9 @@ class Custom extends Base
             else
             {
                 //追加写入
-                $handle=fopen($model_path,"w");
-                fwrite($handle,$temp);
-                $error.="model已经存在，追加写入成功！";
+                //$handle=fopen($model_path,"w");
+                //fwrite($handle,$temp);
+                $error.="model已经存在，建议手动添加！";
             }
 
         }
@@ -239,6 +242,8 @@ class Custom extends Base
         $createModel=new CreateModel();
         $model=$createModel->create($data);
         $this->assign('model',$model);
+
+
         //获得event层
         if(isset($data['is_event']) && $data['is_event']==1)
         {
@@ -255,6 +260,7 @@ class Custom extends Base
             $createEvent = new CreateEvent();
             $event = $createEvent->create($data);
         }
+
         $this->assign('event',$event);
         $this->assign('api',$api);
         return $this->fetch();

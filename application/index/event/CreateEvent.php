@@ -24,7 +24,7 @@ class CreateEvent extends Base
         $eventStr.="\n";
         $eventStr.="{";
         $eventStr.="\n\t";
-        $eventStr.='$'.$modelName.'=new '.ucfirst($modelName).'Model();';
+        $eventStr.='$'.$modelName.'=new '.ucfirst($modelName).'();';
         $eventStr.="\n\t";
         $eventStr.='return $'.$modelName.'->'.$method_name.'($data);';
         $eventStr.="\n";
