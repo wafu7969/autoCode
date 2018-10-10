@@ -163,7 +163,10 @@
                     <tr>
                         <th>{$vo.COLUMN_NAME}</th>
                         <td>{$vo.DATA_TYPE}</td>
-                        <td>{$vo.COLUMN_COMMENT}</td>
+                        <td>
+                            {$vo.COLUMN_COMMENT}
+                            <input type="hidden" name="{$tableName}[{$vo.COLUMN_NAME}][where][comment]" value="{$vo.COLUMN_COMMENT}">
+                        </td>
                         <td>
                             <select class="select" size="1" name="{$tableName}[{$vo.COLUMN_NAME}][where][condition]">
                                 <option value="0">选择条件</option>

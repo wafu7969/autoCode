@@ -76,6 +76,8 @@ class CreateModel extends Base
             $where='where($where)->';
             foreach($filedJoinWhere['where'] as $key=>$value)
             {
+                $methodStr.='//'.$value['condition'];   //用表字段形成注释
+                $methodStr.="\n\t";
                 $value['condition']=trim($value['condition']);
                 if($value['condition']!='between' && $value['condition']!='like')
                 {
@@ -164,7 +166,7 @@ class CreateModel extends Base
                             $methodStr.="\n\t";
                             $methodStr.='{';
                             $methodStr.="\n\t\t";
-                            $methodStr.= '$where[\''.$key.'\']=[\'>=\',$data[\''.$value['field'].'\']];';
+                            $methodStr.= '$where[\''.$key.'\'][]=[\'>=\',$data[\''.$value['field'].'\']];';
                             $methodStr.="\n\t";
                             $methodStr.='}';
                             $methodStr.="\n\t";
@@ -174,7 +176,7 @@ class CreateModel extends Base
                             $methodStr.="\n\t";
                             $methodStr.='{';
                             $methodStr.="\n\t";
-                            $methodStr.= '$where[\''.$key.'\']=[\'<=\',$data[\''.$value['field'].'\']];';
+                            $methodStr.= '$where[\''.$key.'\'][]=[\'<=\',$data[\''.$value['field'].'\']];';
                             $methodStr.="\n\t";
                             $methodStr.='}';
                             $methodStr.="\n\t";
@@ -188,7 +190,7 @@ class CreateModel extends Base
                             $methodStr.="\n\t";
                             $methodStr.='{';
                             $methodStr.="\n\t\t";
-                            $methodStr.= '$where[\''.$key.'\']=[\'>=\',$data[\''.$a[0].'\']];';
+                            $methodStr.= '$where[\''.$key.'\'][]=[\'>=\',$data[\''.$a[0].'\']];';
                             $methodStr.="\n\t";
                             $methodStr.='}';
                             $methodStr.="\n\t";
@@ -198,7 +200,7 @@ class CreateModel extends Base
                             $methodStr.="\n\t";
                             $methodStr.='{';
                             $methodStr.="\n\t";
-                            $methodStr.= '$where[\''.$key.'\']=[\'<=\',$data[\''.$a[1].'\']];';
+                            $methodStr.= '$where[\''.$key.'\'][]=[\'<=\',$data[\''.$a[1].'\']];';
                             $methodStr.="\n\t";
                             $methodStr.='}';
                             $methodStr.="\n\t";
