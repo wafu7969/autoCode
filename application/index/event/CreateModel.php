@@ -238,7 +238,7 @@ class CreateModel extends Base
                 //是否分页
                 if(isset($data['is_page']) && $data['is_page']==1)
                 {
-                    $sql.='paginate('.$data['page_size'].');';
+                    $sql.='paginate($data["page"],'.$data['page_size'].');';
                 }
                 else
                 {

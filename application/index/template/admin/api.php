@@ -6,7 +6,7 @@
  * Time: {$create_time$}
  */
 
-namespace app\admin\controller\v5;
+namespace app\admin\controller;
 use app\admin\controller\Admin;
 use app\admin\event\{$api_name$}Event;
 
