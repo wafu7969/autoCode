@@ -47,8 +47,6 @@ class CreateModel extends Base
 
 
 
-
-
     //生成model层的方法
     public function select($data,$method)
     {
@@ -213,6 +211,16 @@ class CreateModel extends Base
                 }
 
             }
+        }
+
+
+        //是否分页
+        if(isset($data['is_page']) && $data['is_page']==1)
+        {
+            $methodStr.="//分页 默认1";
+            $methodStr.="\n\t";
+            $methodStr.='$data["page"]=isset($data["page"])?$data["page"]:1;';
+            $methodStr.="\n\t";
         }
 
         $sql='';
