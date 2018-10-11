@@ -76,7 +76,8 @@ class CreateModel extends Base
             $where='where($where)->';
             foreach($filedJoinWhere['where'] as $key=>$value)
             {
-                $methodStr.='//'.$value['condition'];   //用表字段形成注释
+                $methodStr.="\n\t";
+                $methodStr.='//'.$value['comment'];   //用表字段形成注释
                 $methodStr.="\n\t";
                 $value['condition']=trim($value['condition']);
                 if($value['condition']!='between' && $value['condition']!='like')
